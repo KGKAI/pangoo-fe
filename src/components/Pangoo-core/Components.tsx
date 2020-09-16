@@ -1,9 +1,10 @@
 import React, { FC, CSSProperties } from "react";
 import { TextConfigType, ButtonConfigType } from "./schema";
-import { Button as _Button } from 'antd';
+import { Button as _Button } from "antd";
 
 const Text: FC<TextConfigType> = (props) => {
 	const style: CSSProperties = {
+		width: props.width + "px",
 		fontSize: props.fontSize + "px",
 		lineHeight: props.lineHeight,
 		color: props.color,
@@ -13,10 +14,9 @@ const Text: FC<TextConfigType> = (props) => {
 };
 
 const Button: FC<ButtonConfigType> = (props) => {
-return <_Button type={props.type}>
-    {props.text}
-    </_Button>
+	// console.log(props)
+	return <_Button type={props.type}>{props.text}</_Button>;
 };
 
-let Components: {[key : string]: FC<any>} = { Text, Button };
+let Components: { [key: string]: FC<any> } = { Text, Button };
 export default Components;

@@ -22,8 +22,8 @@ export type BasicTemplateKeyType =
 export type BaseTemplatesType = Array<BasicTemplateItem<BasicTemplateKeyType>>;
 
 const baseTemplates: BaseTemplatesType = [
-  { type: "Text", h: 20 },
-  { type: "Button", h: 20 },
+  { type: "Text", h: 4 },
+  { type: "Button", h: 4 },
 //   { type: "LongText", h: 36 },
 //   { type: "Carousel", h: 20 },
 //   { type: "List", h: 20 },

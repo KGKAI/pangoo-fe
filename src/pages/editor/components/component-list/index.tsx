@@ -23,9 +23,9 @@ const ComponentContainer = () => {
 						);
 					})}
 				</TabPane>
-                <TabPane tab="业务组件" key="2">
-                    标签页2
-                </TabPane>
+				<TabPane tab="业务组件" key="2">
+					标签页2
+				</TabPane>
 			</Tabs>
 		</div>
 	);

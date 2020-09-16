@@ -14,17 +14,17 @@ const EditorHeader = () => {
       title="盘古"
       subTitle="可视化页面编辑器"
       extra={[
-        <Button type="primary">模板库</Button>,
-        <Tooltip title="保存模板">
+        <Button key="template-lib" type="primary">模板库</Button>,
+        <Tooltip key="save" title="保存模板">
           <Button type="link" icon={<SaveOutlined />}></Button>
         </Tooltip>,
-        <Tooltip title="预览">
+        <Tooltip key="preview" title="预览">
           <Button type="link" icon={<EyeOutlined />}></Button>
         </Tooltip>,
-        <Tooltip title="下载源文件">
+        <Tooltip key="download-source" title="下载源文件">
           <Button type="link" icon={<DownloadOutlined />} />
         </Tooltip>,
-        <Tooltip title="下载json">
+        <Tooltip key="download-json" title="下载json">
           <Button type="link" icon={<CloudDownloadOutlined />} />
         </Tooltip>,
       ]}

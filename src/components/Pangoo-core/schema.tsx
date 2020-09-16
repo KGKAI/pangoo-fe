@@ -1,5 +1,5 @@
 import { BasicTemplateKeyType } from "./BaseTemplate";
-import { BusiTemplateKeyType } from "./BussTemplate";
+import { BussTemplateKeyType } from "./BussTemplate";
 import { Property } from "csstype";
 import { ButtonType } from "antd/lib/button";
 export type BasicTemplateItem<T> = {
@@ -7,7 +7,7 @@ export type BasicTemplateItem<T> = {
 	h: number;
 };
 
-export type AllTemplateType = BasicTemplateKeyType | BusiTemplateKeyType;
+export type AllTemplateType = BasicTemplateKeyType | BussTemplateKeyType;
 
 export type SchemaBasicImpl = {
 	editableData: Array<any>;
@@ -19,6 +19,7 @@ export type SchemaImpl = {
 };
 // =========================Text===============================
 export type TextConfigType = {
+	width: number;
 	text: string;
 	color: string;
 	fontSize: number;
@@ -33,14 +34,14 @@ export interface TextSchema extends SchemaBasicImpl {
 
 // =========================Button==============================
 export type ButtonConfigType = {
-  type: ButtonType;
+	type: ButtonType;
 	text: string;
 	width: number;
 	height: number;
 	color: string;
 	backgroundColor: string;
 	borderRadius: number;
-  link: string;
+	link: string;
 };
 
 export interface ButtonSchema extends SchemaBasicImpl {
@@ -53,12 +54,24 @@ export interface SchemaType extends SchemaImpl {
 	Button: ButtonSchema;
 }
 
+export enum ItemType {
+	TEXT,
+	COLOR,
+	SELECT,
+	NUMBER,
+	UPLOAD,
+	DATALIST,
+	VIDEO,
+	ICON,
+}
+
 const schema = {
 	Text: {
 		editableData: [
-			{ key: "text", name: "文字", type: "Text" },
-			{ key: "color", name: "文字颜色", type: "Color" },
-			{ key: "fontSize", name: "文字大小", type: "Number" },
+			{ key: "width", name: "宽度", type: ItemType.TEXT },
+			{ key: "text", name: "文字", type: ItemType.TEXT },
+			{ key: "color", name: "文字颜色", type: ItemType.COLOR },
+			{ key: "fontSize", name: "文字大小", type: ItemType.NUMBER },
 			{
 				key: "align",
 				name: "对齐方式",
@@ -69,34 +82,35 @@ const schema = {
 					{ key: "right", name: "右对齐" },
 				],
 			},
-			{ key: "lineHeight", name: "行高", type: "Number" },
+			{ key: "lineHeight", name: "行高", type: ItemType.NUMBER },
 		],
 		config: {
+			width: 100,
 			text: "我是文本",
 			color: "#dda123",
 			fontSize: 16,
 			align: "center",
-			lineHeight: 2,
+			lineHeight: 1,
 		},
 	},
 	Button: {
 		editableData: [
-      { key: 'type', name: '按钮类型', type: "Text"},
-			{ key: "text", name: "按钮文字", type: "Text" },
-			{ key: "width", name: "宽度", type: "Number" },
-			{ key: "height", name: "高度", type: "Number" },
-			{ key: "color", name: "文字颜色", type: "Color" },
-			{ key: "backgroundColor", name: "背景颜色", type: "Color" },
-			{ key: "borderRadius", name: "圆角", type: "Number" },
-			{ key: "link", name: "链接", type: "Text" },
+			{ key: "type", name: "按钮类型", type: ItemType.TEXT },
+			{ key: "text", name: "按钮文字", type: ItemType.TEXT },
+			{ key: "width", name: "宽度", type: ItemType.NUMBER },
+			{ key: "height", name: "高度", type: ItemType.NUMBER },
+			{ key: "color", name: "文字颜色", type: ItemType.COLOR },
+			{ key: "backgroundColor", name: "背景颜色", type: ItemType.COLOR },
+			{ key: "borderRadius", name: "圆角", type: ItemType.NUMBER },
+			{ key: "link", name: "链接", type: ItemType.TEXT },
 		],
 		config: {
-      type: 'primary',
+			type: "primary",
 			text: "我是按钮",
 			width: 200,
 			height: 20,
-			color: "#FFFFFF",
-			backgroundColor: "#000000",
+			color: "#aaaaaa",
+			backgroundColor: "#aaaaaa",
 			borderRadius: 0,
 			link: "",
 		},

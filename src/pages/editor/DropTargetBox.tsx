@@ -1,68 +1,122 @@
 import React, { useState, useEffect } from "react";
-import { useDrop } from "react-dnd";
+import { useDrop, DragPreviewImage } from "react-dnd";
 import Draggable from "react-draggable";
 import { Tooltip } from "antd";
-import GridLayout from "react-grid-layout";
-import {inject, observer} from "mobx-react";
-import {appState} from "../../store";
+import GridLayout, { Layout } from "react-grid-layout";
+import { observer } from "mobx-react";
+import { v4 as uuidv4 } from "uuid";
+import { useStore } from "../../store";
+import ParseEngine from "../../components/Pangoo-core/ParseEngine";
 
-@inject(() => appState)
-@observer
-const DropTargetBox = (props: any) => {
-	const { pState } = props;
-	const pointData = pState ? pState.pointData : {};
+const DropTargetBox = observer((props: any) => {
+	const store: any = useStore();
+	// console.log(store.curPoint);
+	// console.log(store.pointData);
+	const pointData = store.pointData ? store.pointData : [];
+	const allTypes = props.allTypes;
 	const [isShowTip, setIsShowTip] = useState(true);
 	const [canvasRect, setCanvasRect] = useState<number[]>([]);
-	const [collectedProps, drop] = useDrop({
-		accept: ["Text", "Button"],
-		drop: (item, monitor) => {},
+	const [{ isOver, canDrop, item }, drop] = useDrop({
+		accept: allTypes, // 定义可放置的类型
+		drop: (item, monitor) => {
+			let parentDiv: HTMLElement = document.getElementById("canvas")!,
+				pointRect: DOMRect = parentDiv!.getBoundingClientRect(),
+				top: number = pointRect.top,
+				pointEnd = monitor.getSourceClientOffset(),
+				y = pointEnd!.y < top ? 0 : pointEnd!.y - top,
+				col = 24,
+				cellHeight = 2,
+				w = col;
+			// console.log(pointRect, pointEnd);
+			let gridY = Math.ceil(y / cellHeight);
+			// console.log(gridY);
+			store.addPointData({
+				id: uuidv4(),
+				item,
+				point: {
+					i: `x-${pointData.length}`,
+					x: 0,
+					y: gridY,
+					w: 2,
+					h: (item as any).h,
+					isBounded: true,
+				},
+			});
+		},
+		collect: (monitor) => ({
+			isOver: monitor.isOver(),
+			canDrop: monitor.canDrop(),
+			item: monitor.getItem(),
+		}),
 	});
 
 	useEffect(() => {
-		let element = document.getElementById("canvas");
-		let { width = 0, height = 0 } = element
-			? element.getBoundingClientRect()
-			: {};
+		let { width, height } = document
+			.getElementById("canvas")!
+			.getBoundingClientRect();
 		setCanvasRect([width, height]);
-    }, []);
-    
-    // const onDragStart = (layout, oldItem, newItem, placeholder, e, element) => {
-    //     const curPointData = pointData.filter(item => item.id === newItem.i)[0];
-        
-    // };
+	}, []);
 
+	const onDragStop = (
+		layout: any,
+		oldItem: any,
+		newItem: any,
+		placeholder: any,
+		e: any,
+		element: any
+	) => {
+		const curPointData = pointData.filter(
+			(v: any) => v.id === newItem.i
+		)[0];
+		store.setCurPoint(curPointData);
+		// console.log(store.curPoint)
+	};
+
+	const onDragStart = (
+		layout: any,
+		oldItem: any,
+		newItem: any,
+		placeholder: any,
+		e: any,
+		element: any
+	) => {
+		const curPointData = pointData.filter(
+			(v: any) => v.id === newItem.i
+		)[0];
+		store.setCurPoint(curPointData);
+	};
+	const opacity = isOver ? 0.7 : 1;
 	return (
-		<Draggable handle=".js_box">
-			<div className="canvas-box">
-				<div id="canvas" ref={drop}>
-					<Tooltip
-						placement="right"
-						title="鼠标按住此处拖拽画布"
-						visible={isShowTip}
-					>
-						<div
-							className="js_box"
-							style={{
-								width: "10px",
-								height: "100%",
-								position: "absolute",
-								borderRadius: "0 6px 6px 0",
-								backgroundColor: "#2f54eb",
-								right: "-10px",
-								top: "0",
-								color: "#fff",
-								cursor: "move",
-							}}
-						/>
-					</Tooltip>
-
-					{pointData.length > 0 ? (
-						<GridLayout cols={24} rowHeight={2} width={canvasRect[0]} margin={[0, 0]}></GridLayout>
-					) : null}
-				</div>
+		// <Draggable>
+		<div className="canvas-box">
+			<div
+				id="canvas"
+				ref={drop}
+				className="canvas"
+				style={{
+					opacity,
+				}}
+			>
+				<GridLayout
+					cols={24}
+					rowHeight={2}
+					width={canvasRect[0]}
+					isDraggable={true}
+					onDragStart={onDragStart}
+					onDragStop={onDragStop}
+				>
+					{pointData.map((point: any) => {
+						return (
+							<div key={point.id} data-grid={point.point}>
+								<ParseEngine {...point.item} isTpl={false} />
+							</div>
+						);
+					})}
+				</GridLayout>
 			</div>
-		</Draggable>
+		</div>
+		// </Draggable>
 	);
-};
+});
 
 export default DropTargetBox;

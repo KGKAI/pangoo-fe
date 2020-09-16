@@ -1,15 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Provider } from "mobx-react";
-import { appState } from "./store";
+
 import Editor from "./pages/editor";
+import { StoreProvider } from "./store";
 import "./index.scss";
 
 const App = () => {
 	return (
-		<Provider rootStore={appState}>
+		<StoreProvider>
 			<Editor />
-		</Provider>
+		</StoreProvider>
 	);
 };
 
