@@ -21,8 +21,9 @@ export function createStore() {
 				(item: any) => item.id === id
 			);
 			let points = this.pointData.splice(index, 1);
-			if (points[0].id === (this.curPoint as any).id) {	// 如果删除了当前的元素，那么要相应地将curPoint置空
-				this.curPoint = null
+			if (points[0].id === (this.curPoint as any).id) {
+				// 如果删除了当前的元素，那么要相应地将curPoint置空
+				this.curPoint = null;
 			}
 		},
 	};

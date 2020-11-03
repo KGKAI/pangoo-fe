@@ -86,6 +86,6 @@ module.exports = {
       ],
       threadPool: happyThreadPool,
       verbose: true
-  }),
+    })
   ]
 };
